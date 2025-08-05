@@ -1,24 +1,91 @@
-# README
+# Red Heart Fashion Hub
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Red Heart Fashion Hub is a Ruby on Rails-based e-commerce platform tailored for women's fashion. It includes features such as product listings, category browsing, user roles, shopping cart, order management, and more.
 
-Things you may want to cover:
+##  Getting Started
 
-* Ruby version
+These steps will help you set up and run the application locally.
 
-* System dependencies
+---
 
-* Configuration
+##  Prerequisites
 
-* Database creation
+Make sure you have the following installed:
 
-* Database initialization
+- Ruby (version defined in `.ruby-version`)
+- Rails
+- Node.js
+- Yarn
+- PostgreSQL (or the database configured in `config/database.yml`)
 
-* How to run the test suite
+---
 
-* Services (job queues, cache servers, search engines, etc.)
+##  Installation
 
-* Deployment instructions
+Clone the repository:
 
-* ...
+```bash
+git clone https://github.com/abrar530/red_heart_fashion_hub.git
+cd red_heart_fashion_hub
+```
+
+---
+
+##  Install Dependencies
+
+If not already installed, run:
+
+```bash
+bundle install
+yarn install
+```
+
+>  Skip this step if you've already installed the dependencies on your machine.
+
+---
+
+##  Set Up the Database
+
+Run the following commands to set up and seed the database:
+
+```bash
+rails db:create
+rails db:migrate
+rails db:seed
+```
+
+
+---
+
+##  Start the Server
+
+Start the Rails development server:
+
+```bash
+rails server
+```
+
+Then, open your browser and visit:
+
+```text
+http://localhost:3000
+```
+
+---
+
+##  Notes
+
+- You must be in the root project folder (`red_heart_fashion_hub`) before running these commands.
+- If any gems or JS packages are added later, run `bundle install` or `yarn install` again.
+
+---
+
+##  Contributing
+
+If you're contributing to the project, please create a feature branch and make pull requests for review.
+
+---
+
+##  License
+
+This project is currently unlicensed. You may add a license in the future.

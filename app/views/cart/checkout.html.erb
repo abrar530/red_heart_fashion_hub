@@ -1,0 +1,64 @@
+<h1>Checkout Summary</h1>
+
+<% if @products.any? %>
+
+  <!-- Province selector for tax calculation -->
+  <%= form_with url: checkout_path, method: :get, local: true do %>
+    <label for="province"><strong>Select Province:</strong></label>
+    <%= select_tag :province, options_for_select(['MB', 'ON', 'BC', 'AB', 'SK'], @selected_province), onchange: "this.form.submit()" %>
+  <% end %>
+
+  <%= form_with url: submit_order_path, method: :post, scope: :customer_order, local: true do |f| %>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+          <tr>
+            <td><%= product.name %></td>
+            <td><%= @cart[product.id.to_s] %></td>
+            <td>$<%= number_with_precision(product.price, precision: 2) %></td>
+            <td>$<%= number_with_precision(product.price * @cart[product.id.to_s].to_i, precision: 2) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <p><strong>Subtotal:</strong> $<%= number_with_precision(@subtotal, precision: 2) %></p>
+    <p><strong>GST (<%= (@tax_rate * 100).to_i %>%):</strong> $<%= number_with_precision(@gst, precision: 2) %></p>
+    <p><strong>Total:</strong> $<%= number_with_precision(@total, precision: 2) %></p>
+
+    <hr>
+
+    <h2>Customer Information</h2>
+
+    <div>
+      <%= f.label :customer_name, "Customer Name" %><br>
+      <%= f.text_field :customer_name, required: true %>
+    </div>
+
+    <div>
+      <%= f.label :address, "Address" %><br>
+      <%= f.text_field :address, required: true %>
+    </div>
+
+    <div>
+      <%= f.label :province, "Province" %><br>
+      <%= f.select :province, options_for_select(['MB', 'ON', 'BC', 'AB', 'SK'], @selected_province), {}, required: true %>
+    </div>
+
+    <br>
+    <%= f.submit "Place Order" %>
+
+  <% end %>
+
+<% else %>
+  <p>Your cart is empty.</p>
+<% end %>

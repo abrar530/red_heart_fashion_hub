@@ -1,0 +1,15 @@
+<h1>Products</h1>
+
+<% @products.each do |product| %>
+  <div class="product">
+    <p><strong>Name:</strong> <%= product.name %></p>
+    <p><strong>Description:</strong> <%= product.description %></p>
+    <p><strong>Price:</strong> <%= number_to_currency(product.price) %></p>
+    <p><strong>Category:</strong>
+      <%= link_to product.category.name, category_path(product.category) if product.category %>
+    </p>
+    <p><%= link_to "Show this product", product_path(product) %></p>
+  </div>
+<% end %>
+
+<p><%= link_to "New product", new_product_path %></p>

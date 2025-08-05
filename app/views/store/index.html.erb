@@ -1,0 +1,31 @@
+<h1>Available Products</h1>
+
+<%= form_with url: store_index_path, method: :get, local: true do %>
+  <div>
+    <%= label_tag :search, "Search Products" %>
+    <%= text_field_tag :search, params[:search] %>
+
+    <%= label_tag :category_id, "Category" %>
+    <%= select_tag :category_id, options_from_collection_for_select(@categories, :id, :name, params[:category_id]), include_blank: true %>
+
+    <%= submit_tag "Search" %>
+  </div>
+<% end %>
+
+<% @products.each do |product| %>
+  <div style="border: 1px solid #ccc; margin-bottom: 20px; padding: 10px;">
+    <% if product.image.attached? %>
+      <%= image_tag product.image, width: 200 %>
+    <% else %>
+      <p>No image available</p>
+    <% end %>
+
+    <h2><%= link_to product.name, store_show_path(product) %></h2>
+    <p><%= product.description %></p>
+    <p><strong>Price:</strong> $<%= product.price %></p>
+
+    <%= button_to "Add to Cart", add_to_cart_path(product), method: :post %>
+  </div>
+<% end %>
+
+

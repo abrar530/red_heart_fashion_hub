@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post '/cart/add/:id',     to: 'cart#add',          as: 'add_to_cart'
   post '/cart/remove/:id',  to: 'cart#remove',       as: 'remove_from_cart'
   post '/cart/update/:id',  to: 'cart#update',       as: 'update_cart'
+  post '/cart/update_quantities', to: 'cart#update_quantities', as: 'update_cart_quantities'  
 
   # Checkout Process
   get  '/checkout',          to: 'cart#checkout',     as: 'checkout'

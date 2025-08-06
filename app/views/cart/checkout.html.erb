@@ -1,17 +1,19 @@
-<h1>Checkout Summary</h1>
+<h1 class="text-center my-4">Checkout Summary</h1>
 
 <% if @products.any? %>
 
   <!-- Province selector for tax calculation -->
-  <%= form_with url: checkout_path, method: :get, local: true do %>
-    <label for="province"><strong>Select Province:</strong></label>
-    <%= select_tag :province, options_for_select(['MB', 'ON', 'BC', 'AB', 'SK'], @selected_province), onchange: "this.form.submit()" %>
-  <% end %>
+  <div class="mb-4 text-center">
+    <%= form_with url: checkout_path, method: :get, local: true, class: "d-inline-block" do %>
+      <label for="province"><strong>Select Province:</strong></label>
+      <%= select_tag :province, options_for_select(['MB', 'ON', 'BC', 'AB', 'SK'], @selected_province), class: "form-select d-inline-block w-auto mx-2", onchange: "this.form.submit()" %>
+    <% end %>
+  </div>
 
-  <%= form_with url: submit_order_path, method: :post, scope: :customer_order, local: true do |f| %>
-
-    <table>
-      <thead>
+  <!-- Quantity Update Form -->
+  <%= form_with url: update_cart_quantities_path, method: :post, local: true do %>
+    <table class="table table-striped text-center align-middle">
+      <thead class="table-dark">
         <tr>
           <th>Product</th>
           <th>Quantity</th>
@@ -23,42 +25,48 @@
         <% @products.each do |product| %>
           <tr>
             <td><%= product.name %></td>
-            <td><%= @cart[product.id.to_s] %></td>
+            <td>
+              <%= number_field_tag "quantities[#{product.id}]", @cart[product.id.to_s], in: 1..99, class: "form-control text-center", style: "width: 80px; margin: auto;" %>
+            </td>
             <td>$<%= number_with_precision(product.price, precision: 2) %></td>
             <td>$<%= number_with_precision(product.price * @cart[product.id.to_s].to_i, precision: 2) %></td>
           </tr>
         <% end %>
       </tbody>
     </table>
+    <div class="text-end">
+      <%= submit_tag "Update Quantities", class: "btn btn-outline-secondary mb-3" %>
+    </div>
+  <% end %>
 
+  <!-- Order Totals -->
+  <div class="mb-4">
     <p><strong>Subtotal:</strong> $<%= number_with_precision(@subtotal, precision: 2) %></p>
-    <p><strong>GST (<%= (@tax_rate * 100).to_i %>%):</strong> $<%= number_with_precision(@gst, precision: 2) %></p>
-    <p><strong>Total:</strong> $<%= number_with_precision(@total, precision: 2) %></p>
+    <p><strong>GST (<%= (@tax_rate * 100).to_i %> %):</strong> $<%= number_with_precision(@gst, precision: 2) %></p>
+    <h5><strong>Total:</strong> $<%= number_with_precision(@total, precision: 2) %></h5>
+  </div>
 
-    <hr>
-
-    <h2>Customer Information</h2>
-
-    <div>
-      <%= f.label :customer_name, "Customer Name" %><br>
-      <%= f.text_field :customer_name, required: true %>
+  <!-- Customer Info + Order Submission -->
+  <%= form_with url: submit_order_path, method: :post, scope: :customer_order, local: true do |f| %>
+    <div class="mb-3">
+      <%= f.label :customer_name, "Customer Name", class: "form-label" %>
+      <%= f.text_field :customer_name, required: true, class: "form-control" %>
     </div>
 
-    <div>
-      <%= f.label :address, "Address" %><br>
-      <%= f.text_field :address, required: true %>
+    <div class="mb-3">
+      <%= f.label :address, "Address", class: "form-label" %>
+      <%= f.text_field :address, required: true, class: "form-control" %>
     </div>
 
-    <div>
-      <%= f.label :province, "Province" %><br>
-      <%= f.select :province, options_for_select(['MB', 'ON', 'BC', 'AB', 'SK'], @selected_province), {}, required: true %>
+    <div class="mb-4">
+      <%= f.label :province, "Province", class: "form-label" %>
+      <%= f.select :province, options_for_select(['MB', 'ON', 'BC', 'AB', 'SK'], @selected_province), {}, { required: true, class: "form-select" } %>
     </div>
 
-    <br>
-    <%= f.submit "Place Order" %>
-
+    <%= f.submit "Place Order", class: "btn btn-danger" %>
   <% end %>
 
 <% else %>
-  <p>Your cart is empty.</p>
+  <div class="alert alert-info text-center">Your cart is empty.</div>
 <% end %>
+

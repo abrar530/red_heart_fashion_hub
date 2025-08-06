@@ -1,31 +1,54 @@
-<h1>Available Products</h1>
+<!-- Page Title -->
+<h1 class="text-center my-4">Explore Red Heart Fashion Hub</h1>
 
-<%= form_with url: store_index_path, method: :get, local: true do %>
-  <div>
-    <%= label_tag :search, "Search Products" %>
-    <%= text_field_tag :search, params[:search] %>
+<!-- ✅ Debug: Show total products loaded -->
+<p class="text-center text-muted small mb-3">Total products loaded: <%= @products.count %></p>
 
-    <%= label_tag :category_id, "Category" %>
-    <%= select_tag :category_id, options_from_collection_for_select(@categories, :id, :name, params[:category_id]), include_blank: true %>
+<!-- Search & Filter Form -->
+<%= form_with url: store_index_path, method: :get, local: true, class: "row g-3 align-items-center justify-content-center mb-4" do %>
+  <div class="col-md-3 col-sm-6">
+    <%= label_tag :search, "Search Products", class: "form-label small" %>
+    <%= text_field_tag :search, params[:search], class: "form-control form-control-sm" %>
+  </div>
 
-    <%= submit_tag "Search" %>
+  <div class="col-md-3 col-sm-6">
+    <%= label_tag :category_id, "Category", class: "form-label small" %>
+    <%= select_tag :category_id, options_from_collection_for_select(@categories, :id, :name, params[:category_id]), include_blank: true, class: "form-select form-select-sm" %>
+  </div>
+
+  <div class="col-auto mt-4">
+    <%= submit_tag "Search", class: "btn btn-dark btn-sm" %>
   </div>
 <% end %>
 
-<% @products.each do |product| %>
-  <div style="border: 1px solid #ccc; margin-bottom: 20px; padding: 10px;">
-    <% if product.image.attached? %>
-      <%= image_tag product.image, width: 200 %>
-    <% else %>
-      <p>No image available</p>
-    <% end %>
+<!-- ✅ Flexbox-based Product Grid -->
+<div class="d-flex justify-content-center flex-wrap gap-4">
+  <% @products.each do |product| %>
+    <div style="width: 260px;">
+      <div class="card h-100 shadow-sm border-0">
+        
+        <!-- Product Image -->
+        <% if product.image.attached? %>
+          <%= image_tag product.image, style: "object-fit: contain; width: 100%; height: auto; max-height: 300px; background-color: #f8f9fa;" %>
+        <% else %>
+          <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+            <p class="text-muted small">No image available</p>
+          </div>
+        <% end %>
 
-    <h2><%= link_to product.name, store_show_path(product) %></h2>
-    <p><%= product.description %></p>
-    <p><strong>Price:</strong> $<%= product.price %></p>
+        <!-- Product Info -->
+        <div class="card-body d-flex flex-column p-3">
+          <h6 class="card-title mb-1"><%= product.name %></h6>
+          <p class="card-text text-muted small mb-2"><%= truncate(product.description, length: 80) %></p>
+          <p class="fw-bold mb-2 small">Price: $<%= product.price %></p>
 
-    <%= button_to "Add to Cart", add_to_cart_path(product), method: :post %>
-  </div>
-<% end %>
-
-
+          <!-- Buttons -->
+          <div class="mt-auto">
+            <%= link_to "View Details", store_show_path(product), class: "btn btn-outline-secondary btn-sm w-100 mb-1" %>
+            <%= button_to "Add to Cart", add_to_cart_path(product), method: :post, class: "btn btn-danger btn-sm w-100" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
